@@ -48,6 +48,7 @@ namespace ProyectoArchivos
                             bajas();
                             break;
                         case 3:
+                            consultas();
                             break;
                         case 4:
                             break;
@@ -270,6 +271,66 @@ namespace ProyectoArchivos
             {
                 lectura.Close();
                 temporal.Close();
+            }
+        }//Fin del metodo bajas....
+
+
+        static void consultas()
+        {
+            encontrado = false;
+            try
+            {
+                lectura = File.OpenText("autos.txt");
+                Console.WriteLine("Ingresa el fabricante por el auto: ");
+                fabricante = Console.ReadLine();
+                fabricante = fabricante.ToUpper();
+                cadena = lectura.ReadLine();
+                while (cadena != null)
+                {
+                    campos = cadena.Split(',');
+                    if (campos[3].Trim().Equals(fabricante))
+                    {
+                        encontrado = true;
+                        Console.WriteLine("*******************************************");
+                        Console.WriteLine("Auto encontrado con los siguientes Datos: ");
+                        Console.WriteLine("No. Serie: " + campos[0]);
+                        Console.WriteLine("Modelo: " + campos[1]);
+                        Console.WriteLine("Anio: " + campos[2]);
+                        Console.WriteLine("Marca : " + campos[3]);
+                        Console.WriteLine("Color: " + campos[4]);
+                        Console.WriteLine("Precio: " + campos[5]);
+                        Console.WriteLine("*******************************************");  
+                    }
+                    cadena = lectura.ReadLine();
+                }//fin del while
+
+                //Si no hay autos con ese fabricante...
+                if (encontrado == false)
+                {
+                    Console.WriteLine("*******************************************");
+                    Console.WriteLine("***No hay autos con el fabricante**" + fabricante);
+                    Console.WriteLine("*******************************************");
+                }
+                lectura.Close();
+            }
+            catch (FormatException fe)
+            {
+                //Capturamos la excepcion el cual despliega cuando el usuario haya insertado algo que no sea un caracter.
+                //Por ejemplo un numero....
+                Console.WriteLine("*******************************************");
+                Console.WriteLine("Error! " + fe.Message);
+                Console.WriteLine("*******************************************");
+                // Console.WriteLine(e.Message);
+            }
+            catch (Exception ex)
+            {
+                //Capturamos cualquier excepcion que se nos presente al momento de agregar elementos.
+                Console.WriteLine("*******************************************");
+                Console.WriteLine("Error! " + ex.Message);
+                Console.WriteLine("*******************************************");
+            }finally
+            {
+                lectura.Close();
             }
         }
 
