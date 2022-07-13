@@ -45,6 +45,7 @@ namespace ProyectoArchivos
                             altas();
                             break;
                         case 2:
+                            bajas();
                             break;
                         case 3:
                             break;
@@ -187,6 +188,90 @@ namespace ProyectoArchivos
             }
         }//Fin del metodo altas
 
+        static void bajas()
+        {
+            encontrado = false;
+            try
+            {
+                lectura = File.OpenText("autos.txt");
+                temporal = File.CreateText("tmp.txt");
+                Console.WriteLine("Ingresa el numero de seria del auto que deseas ELIMINAR");
+                noSerie = Console.ReadLine();
+                noSerie = noSerie.ToUpper();
+                cadena = lectura.ReadLine();
+                while (cadena != null)
+                {
+                    campos = cadena.Split(',');
+                    //Si en la posicion del noSerie es igual al que andamos buscando , imprimimos los datos
+                    //y establecemos la variable encontrado a verdadero
+                    if (campos[0].Trim().Equals(noSerie))
+                    {
+                        encontrado = true;
+                        Console.WriteLine("*******************************************");
+                        Console.WriteLine("Auto encontrado con los siguientes Datos: ");
+                        Console.WriteLine("No. Serie: " + campos[0]);
+                        Console.WriteLine("Modelo: " + campos[1]);
+                        Console.WriteLine("Anio: " + campos[2]);
+                        Console.WriteLine("Marca : " + campos[3]);
+                        Console.WriteLine("Color: " + campos[4]);
+                        Console.WriteLine("Precio: " + campos[5]);
+                        Console.WriteLine("*******************************************");
+                        Console.WriteLine("Realmente deseas Eliminarlo(SI/NO)?....");
+                        respuesta = Console.ReadLine();
+                        respuesta = respuesta.ToUpper();
+
+                        if (!respuesta.Equals("SI"))
+                        {
+                            temporal.WriteLine(cadena);
+                        }
+                    }
+                    else
+                    {
+                        temporal.WriteLine(cadena);
+                    }
+                    //Lectura adelantada
+                    cadena = lectura.ReadLine();
+                }
+                if (encontrado == false)
+                {
+                    Console.WriteLine("*******************************************");
+                    Console.WriteLine("***El un auto con el No. de Serie " + noSerie + " , no esta en la BD");
+                    Console.WriteLine("*******************************************");
+                } else if (respuesta.Equals("SI"))
+                {
+                    Console.WriteLine("*******************************************");
+                    Console.WriteLine("***Auto Eliminado***");
+                    Console.WriteLine("*******************************************");
+                }
+                else
+                {
+                    Console.WriteLine("*******************************************");
+                    Console.WriteLine("***Operacion de Eliminacion Cancelada**");
+                    Console.WriteLine("*******************************************");
+                }
+                lectura.Close();
+                temporal.Close();
+                File.Delete("autos.txt");
+                File.Move("tmp.txt" , "autos.txt");
+            }
+            catch (FileNotFoundException fn)
+            {
+                Console.WriteLine("*******************************************");
+                Console.WriteLine("¡Error! " + fn.Message);
+                Console.WriteLine("*******************************************");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("*******************************************");
+                Console.WriteLine("¡Error! " + e.Message);
+                Console.WriteLine("*******************************************");
+            }
+            finally
+            {
+                lectura.Close();
+                temporal.Close();
+            }
+        }
 
     }//Fin de la clase program
 }
