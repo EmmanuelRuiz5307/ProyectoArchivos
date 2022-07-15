@@ -51,6 +51,7 @@ namespace ProyectoArchivos
                             consultas();
                             break;
                         case 4:
+                            modificaciones();
                             break;
                         case 5:
                             break;
@@ -74,7 +75,7 @@ namespace ProyectoArchivos
                 Console.WriteLine("*******************************************");
                 Console.WriteLine("Error! " + fe.Message);
                 Console.WriteLine("*******************************************");
-               // Console.WriteLine(e.Message);
+                // Console.WriteLine(e.Message);
             }
             catch (Exception ex)
             {
@@ -238,7 +239,8 @@ namespace ProyectoArchivos
                     Console.WriteLine("*******************************************");
                     Console.WriteLine("***El un auto con el No. de Serie " + noSerie + " , no esta en la BD");
                     Console.WriteLine("*******************************************");
-                } else if (respuesta.Equals("SI"))
+                }
+                else if (respuesta.Equals("SI"))
                 {
                     Console.WriteLine("*******************************************");
                     Console.WriteLine("***Auto Eliminado***");
@@ -253,7 +255,7 @@ namespace ProyectoArchivos
                 lectura.Close();
                 temporal.Close();
                 File.Delete("autos.txt");
-                File.Move("tmp.txt" , "autos.txt");
+                File.Move("tmp.txt", "autos.txt");
             }
             catch (FileNotFoundException fn)
             {
@@ -274,7 +276,7 @@ namespace ProyectoArchivos
             }
         }//Fin del metodo bajas....
 
-
+        //Creacion del metodo consultas
         static void consultas()
         {
             encontrado = false;
@@ -299,7 +301,7 @@ namespace ProyectoArchivos
                         Console.WriteLine("Marca : " + campos[3]);
                         Console.WriteLine("Color: " + campos[4]);
                         Console.WriteLine("Precio: " + campos[5]);
-                        Console.WriteLine("*******************************************");  
+                        Console.WriteLine("*******************************************");
                     }
                     cadena = lectura.ReadLine();
                 }//fin del while
@@ -328,11 +330,165 @@ namespace ProyectoArchivos
                 Console.WriteLine("*******************************************");
                 Console.WriteLine("Error! " + ex.Message);
                 Console.WriteLine("*******************************************");
-            }finally
+            }
+            finally
             {
                 lectura.Close();
             }
-        }
+        }//Fin del metodo consultas
+
+        //Creando metodo modificaciones
+        static void modificaciones()
+        {
+            encontrado = false;
+            byte opcionM;
+            opcionM = 0;
+            string nuevoModelo, nuevoFabricante, nuevoColor;
+            short nuevoAnio;
+            double nuevoPrecio;
+
+
+            try
+            {
+                lectura = File.OpenText("autos.txt");
+                temporal = File.CreateText("tmp.txt");
+                Console.WriteLine("Ingresa el numero de serie del Auto que deseas modificar: ");
+                noSerie = Console.ReadLine();
+                noSerie = noSerie.ToUpper();
+                cadena = lectura.ReadLine();
+
+                while (cadena != null)
+                {
+                    campos = cadena.Split(',');
+                    if (campos[0].Trim().Equals(noSerie))
+                    {
+                        encontrado = true;
+                        Console.WriteLine("*******************************************");
+                        Console.WriteLine("Auto encontrado con los siguientes Datos: ");
+                        Console.WriteLine("No. Serie: " + campos[0]);
+                        Console.WriteLine("Modelo: " + campos[1]);
+                        Console.WriteLine("Anio: " + campos[2]);
+                        Console.WriteLine("Marca : " + campos[3]);
+                        Console.WriteLine("Color: " + campos[4]);
+                        Console.WriteLine("Precio: " + campos[5]);
+                        Console.WriteLine("*******************************************");
+
+                        Console.Write("Es el registro que buscabas(SI/NO)?...");
+                        respuesta = Console.ReadLine();
+                        respuesta = respuesta.ToUpper();
+
+                        if (respuesta.Equals("SI"))
+                        {
+                            Console.WriteLine("Menu de Opciones para Modificar");
+                            Console.WriteLine("1. Modelo");
+                            Console.WriteLine("2. Anio");
+                            Console.WriteLine("3. Fabricante");
+                            Console.WriteLine("4. Color");
+                            Console.WriteLine("5. Precios");
+                            Console.WriteLine("Que deseas modificar?....");
+                            opcionM = Convert.ToByte(Console.ReadLine());
+                            switch (opcionM)
+                            {
+                                case 1:
+                                    Console.Write("Ingresa el Nuevo Modelo: ");
+                                    nuevoModelo = Console.ReadLine();
+                                    nuevoModelo = nuevoModelo.ToUpper();
+                                    temporal.WriteLine(campos[0] + ", " + nuevoModelo + "," + campos[2] + "," + campos[3] + "," + campos[4] + "," + campos[5]);
+                                    Console.WriteLine("******************************");
+                                    Console.WriteLine("****REGISTRO MODIFICADO OK****");
+                                    Console.WriteLine("******************************");
+                                    break;
+                                case 2:
+                                    Console.Write("Ingresa el nuevo Anio: ");
+                                    nuevoAnio = Convert.ToInt16(Console.ReadLine());
+                                    temporal.WriteLine(campos[0] + "," + campos[1] + ", " + nuevoAnio + "," + campos[3] + "," + campos[4] + "," + campos[5]);
+                                    Console.WriteLine("******************************");
+                                    Console.WriteLine("****REGISTRO MODIFICADO OK****");
+                                    Console.WriteLine("******************************");
+                                    break;
+                                case 3:
+                                    Console.Write("Ingresa el nuevo fabricante: ");
+                                    nuevoFabricante = Console.ReadLine();
+                                    nuevoFabricante = nuevoFabricante.ToUpper();
+                                    temporal.WriteLine(campos[0] + "," + campos[1] + "," + campos[2] + ", " + nuevoFabricante + "," + campos[4] + "," + campos[5]);
+                                    Console.WriteLine("******************************");
+                                    Console.WriteLine("****REGISTRO MODIFICADO OK****");
+                                    Console.WriteLine("******************************");
+                                    break;
+         
+                                case 4:
+                                    Console.Write("Ingresa el nuevo color: ");
+                                    nuevoColor = Console.ReadLine();
+                                    nuevoColor = nuevoColor.ToUpper();
+                                    temporal.WriteLine(campos[0] + "," + campos[1] + "," + campos[2] + "," + campos[3] + ", " + nuevoColor + "," + campos[5]);
+                                    Console.WriteLine("******************************");
+                                    Console.WriteLine("****REGISTRO MODIFICADO OK****");
+                                    Console.WriteLine("******************************");
+                                    break;
+                                case 5:
+                                    Console.Write("Ingresa el nuevo precio: ");
+                                    nuevoPrecio = Convert.ToDouble(Console.ReadLine());
+                                    temporal.WriteLine(campos[0] + "," + campos[1] + "," + campos[2] + "," + campos[3] + "," + campos[4] + ", " + nuevoPrecio);
+                                    Console.WriteLine("******************************");
+                                    Console.WriteLine("****REGISTRO MODIFICADO OK****");
+                                    Console.WriteLine("******************************");
+                                    break;
+
+                                default:
+                                    Console.WriteLine("******************************");
+                                    Console.WriteLine("****OPCION INCORRECTA****");
+                                    Console.WriteLine("******************************");
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            temporal.WriteLine(cadena);
+                        } //fin del if 2
+                        //fIN DEL IF 1 
+                    }
+                    else
+                    {
+                        temporal.WriteLine(cadena);
+                    }
+                    cadena = lectura.ReadLine();
+                }//fin del while
+                //Si no lo encontramos
+                if (encontrado == false)
+                {
+                    Console.WriteLine("*******************************************");
+                    Console.WriteLine("***El un auto con el No. de Serie " + noSerie + " , no esta en la BD");
+                    Console.WriteLine("*******************************************");
+                }
+                lectura.Close();
+                temporal.Close();
+                File.Delete("autos.txt");
+                File.Move("tmp.txt" , "autos.txt");
+            }catch (FormatException fe)
+            {
+                //Capturamos la excepcion el cual despliega cuando el usuario haya insertado algo que no sea un caracter.
+                //Por ejemplo un numero....
+                Console.WriteLine("*******************************************");
+                Console.WriteLine("Error! " + fe.Message);
+                Console.WriteLine("*******************************************");
+                // Console.WriteLine(e.Message);
+            }
+            catch (Exception ex)
+            {
+                //Capturamos cualquier excepcion que se nos presente al momento de agregar elementos.
+                Console.WriteLine("*******************************************");
+                Console.WriteLine("Error! " + ex.Message);
+                Console.WriteLine("*******************************************");
+            }
+            finally
+            {
+                lectura.Close();
+                temporal.Close();
+            }
+
+        }//Fin del metodo modificaciones
+
+
 
     }//Fin de la clase program
 }
