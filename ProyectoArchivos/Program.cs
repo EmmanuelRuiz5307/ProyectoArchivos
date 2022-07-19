@@ -54,6 +54,7 @@ namespace ProyectoArchivos
                             modificaciones();
                             break;
                         case 5:
+                            consultaGeneral();
                             break;
                         case 6:
                             Console.WriteLine("*******************************************");
@@ -384,7 +385,7 @@ namespace ProyectoArchivos
                             Console.WriteLine("2. Anio");
                             Console.WriteLine("3. Fabricante");
                             Console.WriteLine("4. Color");
-                            Console.WriteLine("5. Precios");
+                            Console.WriteLine("5. Precio");
                             Console.WriteLine("Que deseas modificar?....");
                             opcionM = Convert.ToByte(Console.ReadLine());
                             switch (opcionM)
@@ -487,6 +488,62 @@ namespace ProyectoArchivos
             }
 
         }//Fin del metodo modificaciones
+
+        //Creacion de metodo consultaGeneral
+        static void consultaGeneral()
+        {
+            encontrado = false;
+            try
+            {
+                lectura = File.OpenText("autos.txt");
+                cadena = lectura.ReadLine();
+
+                while (cadena != null)
+                {
+                        campos = cadena.Split(',');
+                        encontrado = true;
+                        Console.WriteLine("*******************************************");
+                        Console.WriteLine("No. Serie: " + campos[0]);
+                        Console.WriteLine("Modelo: " + campos[1]);
+                        Console.WriteLine("Anio: " + campos[2]);
+                        Console.WriteLine("Marca : " + campos[3]);
+                        Console.WriteLine("Color: " + campos[4]);
+                        Console.WriteLine("Precio: " + campos[5]);
+                        Console.WriteLine("*******************************************");
+                    cadena = lectura.ReadLine();
+                }//fin del whileq
+                if (encontrado == false)
+                {
+                    Console.WriteLine("*******************************************");
+                    Console.WriteLine("**********No hay autos en la BD************");
+                    Console.WriteLine("*******************************************");
+                }
+
+                lectura.Close();
+            }
+            catch (FormatException fe)
+            {
+                //Capturamos la excepcion el cual despliega cuando el usuario haya insertado algo que no sea un caracter.
+                //Por ejemplo un numero....
+                Console.WriteLine("*******************************************");
+                Console.WriteLine("Error! " + fe.Message);
+                Console.WriteLine("*******************************************");
+                // Console.WriteLine(e.Message);
+            }
+            catch (Exception ex)
+            {
+                //Capturamos cualquier excepcion que se nos presente al momento de agregar elementos.
+                Console.WriteLine("*******************************************");
+                Console.WriteLine("Error! " + ex.Message);
+                Console.WriteLine("*******************************************");
+            }
+            finally
+            {
+                lectura.Close();
+              //  temporal.Close();
+            }
+
+        }//Fin del metodo consultar
 
 
 
