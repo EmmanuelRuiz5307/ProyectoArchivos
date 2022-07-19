@@ -495,9 +495,10 @@ namespace ProyectoArchivos
             encontrado = false;
             try
             {
+                //Abrimos el archivo y aplicamos lectura adelantada
                 lectura = File.OpenText("autos.txt");
                 cadena = lectura.ReadLine();
-
+                //Implementamos unicamente un ciclo while para desplegar todos los datos que tenemos en nuestro archivo
                 while (cadena != null)
                 {
                         campos = cadena.Split(',');
@@ -512,13 +513,14 @@ namespace ProyectoArchivos
                         Console.WriteLine("*******************************************");
                     cadena = lectura.ReadLine();
                 }//fin del whileq
+                //Si no hay nada en el txt , mostrara el siguiente mensaje...
                 if (encontrado == false)
                 {
                     Console.WriteLine("*******************************************");
                     Console.WriteLine("**********No hay autos en la BD************");
                     Console.WriteLine("*******************************************");
                 }
-
+                //Cerramos la lectura...
                 lectura.Close();
             }
             catch (FormatException fe)
